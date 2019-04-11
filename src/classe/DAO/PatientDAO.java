@@ -30,6 +30,7 @@ public class PatientDAO extends DAO<Patient>{
     @Override
     public void menu() throws SQLException{
         Scanner sc = new Scanner(System.in);
+        Scanner sc2 = new Scanner(System.in);
         int choix;
         do{
             
@@ -45,16 +46,17 @@ public class PatientDAO extends DAO<Patient>{
             System.out.println("2.Afficher les patients");
             System.out.println("3.Modifier un patient");
             System.out.println("4.Supprimer un patient");
-            System.out.println("5.Retour");
+            System.out.println("5.Rechercher un patient sur le nom");
+            System.out.println("6.Retour");
             
             do {
                 System.out.println("Choix ?");
                 choix = sc.nextInt();
-                if (choix < 1 || choix > 5) {
+                if (choix < 1 || choix > 6) {
                     System.out.println("choix incorrect");
                 }
 
-            } while (choix < 1 || choix > 5);
+            } while (choix < 1 || choix > 6);
             
             switch(choix){
                 case 1:
@@ -82,6 +84,20 @@ public class PatientDAO extends DAO<Patient>{
                     suppr();
                     break;
                 case 5:
+                    System.out.println("== Recherche sur le nom ==");
+                    System.out.println("Entrez le nom recherché : ");
+                    String nom = sc2.nextLine();
+                    try {
+                        //appel de la méthode de recherche sur le nom
+                        List<Patient> apat = rechNom(nom);
+                        for (Patient pat : apat) {
+                            System.out.println(pat);
+                        }
+                    }catch (SQLException e) {
+                        System.out.println("erreur " + e.getMessage());
+                    }
+                    break;
+                case 6:
                     System.out.println("Retour au menu");
                     //Retour au menu principal
                     DemoGestion dg = new DemoGestion();
@@ -89,7 +105,7 @@ public class PatientDAO extends DAO<Patient>{
                     break;
             }
                 
-        }while(choix!=5);
+        }while(choix!=6);
     }
 
     @Override
@@ -295,6 +311,32 @@ public class PatientDAO extends DAO<Patient>{
         catch (SQLException e) {
             System.out.println("Erreur : " + e);
         }
+    }
+    
+    public List<Patient> rechNom(String nomrech) throws SQLException {
+        List<Patient> plusieurs = new ArrayList<>();
+        String req = "select * from patient where nom = ?";
+
+        try (PreparedStatement pstm = dbConnect.prepareStatement(req)) {
+            pstm.setString(1, nomrech);
+            try (ResultSet rs = pstm.executeQuery()) {
+                boolean trouve = false;
+                while (rs.next()) {
+                    trouve = true;
+                    int idpat = rs.getInt("IDPAT");
+                    String nom = rs.getString("NOM");
+                    String prenom = rs.getString("PRENOM");
+                    String tel = rs.getString("TEL");
+                    plusieurs.add(new Patient(idpat,nom,prenom,tel));
+                }
+
+                if (!trouve) {
+                    throw new SQLException("nom inconnu");
+                } else {
+                    return plusieurs;
+                }
+            }
+        }             
     }
     
 }

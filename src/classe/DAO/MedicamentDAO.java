@@ -49,21 +49,24 @@ public class MedicamentDAO extends DAO<Medicament> {
 
             System.out.println("1.Créer un médicament");
             System.out.println("2.Afficher les médicaments");
-            System.out.println("3.Modificer un médicament");
+            System.out.println("3.Modifier un médicament");
             System.out.println("4.Supprimer un médicament");
-            System.out.println("5.Retour");
+            System.out.println("5.Rechercher un médicament sur son nom");
+            System.out.println("6.Rechercher un médicament selon sa description");
+            System.out.println("7.Retour");
 
             do {
                 System.out.println("Choix ?");
                 choix = sc.nextInt();
-                if (choix < 1 || choix > 5) {
+                if (choix < 1 || choix > 7) {
                     System.out.println("choix incorrect");
                 }
 
-            } while (choix < 1 || choix > 5);
+            } while (choix < 1 || choix >7);
 
             switch (choix) {
                 case 1:
+                    //appelle la méthode d'encodage d'un nouveau médicament
                     System.out.println("== Encodage d'un nouveau médicament ==");
                     nouveau();
                     break;
@@ -80,14 +83,44 @@ public class MedicamentDAO extends DAO<Medicament> {
                     }
                     break;
                 case 3:
+                    //appelle la méthode d'encodage des modifications à apporter à un enregistrement
                     System.out.println("== Modification d'un médicament déjà existant ==");
                     modif();                    
                     break;
                 case 4:
+                    //appelle la méthode d'encodage de l'identifiant du médicament à supprimer
                     System.out.println("== Suppresion d'un médicament ==");
                     suppr();                    
                     break;
                 case 5:
+                    System.out.println("== Recherche sur le nom ==");
+                    System.out.println("Entrez le nom recherché : ");
+                    String nom = sc2.nextLine();
+                    try {
+                        //appel de la méthode de recherche sur le nom
+                        List<Medicament> amedoc = rechNom(nom);
+                        for (Medicament medoc : amedoc) {
+                            System.out.println(medoc);
+                        }
+                    }catch (SQLException e) {
+                        System.out.println("erreur " + e.getMessage());
+                    }
+                    break;
+                case 6:
+                    System.out.println("== Recherche partielle sur la description ==");
+                    System.out.println("Entrez le mot clé de votre recherche : ");
+                    String desc = sc2.nextLine();
+                    try {
+                        //appel de la méthode recherche partielle sur la description
+                        List<Medicament> amedoc = rechDesc(desc);
+                        for (Medicament medoc : amedoc) {
+                            System.out.println(medoc);
+                        }
+                    }catch (SQLException e) {
+                        System.out.println("erreur " + e.getMessage());
+                    }
+                    break;
+                case 7:
                     System.out.println("Retour au menu");
                     //Retour au menu principal
                     DemoGestion dg = new DemoGestion();
@@ -95,7 +128,7 @@ public class MedicamentDAO extends DAO<Medicament> {
                     break;
             }
 
-        } while (choix != 5);
+        } while (choix != 7);
     }
 
     /**
@@ -209,13 +242,13 @@ public class MedicamentDAO extends DAO<Medicament> {
         String name,d;
         String req = "update medicament set nom=?,description=? where idmedoc= ?";
         try (PreparedStatement pstm = dbConnect.prepareStatement(req)) {
-            System.out.println("Nouveau nom ? ");
+            /*System.out.println("Nouveau nom ? ");
             name=sc2.nextLine();
             System.out.println("Nouvelle description ? ");
-            d=sc2.nextLine();
+            d=sc2.nextLine();*/
             pstm.setInt(3, obj.getIdmedoc());
-            pstm.setString(1,name);
-            pstm.setString(2,d);
+            pstm.setString(1,obj.getNom());
+            pstm.setString(2,obj.getDescription());
             int n = pstm.executeUpdate();
             if (n == 0) {
                 throw new SQLException("aucune ligne médicament mise à jour");
@@ -232,8 +265,10 @@ public class MedicamentDAO extends DAO<Medicament> {
     public void modif() throws SQLException{
 
         Scanner sc = new Scanner(System.in);
+        Scanner sc2 = new Scanner(System.in);
         System.out.println("Quel est l'id du medicament à modifier ? ");
         id=sc.nextInt();
+
         stmt = dbConnect.createStatement();
         rs = stmt.executeQuery("select * from medicament");
         while(rs.next()){
@@ -242,6 +277,10 @@ public class MedicamentDAO extends DAO<Medicament> {
                 description = rs.getString("DESCRIPTION");
                 }
         }
+        System.out.println("Nouveau nom ? ");
+        nom=sc2.nextLine();
+        System.out.println("Nouvelle description ? ");
+        description=sc2.nextLine();
         medoc = new Medicament(id,nom,description);
         try{
             update(medoc);
@@ -302,6 +341,68 @@ public class MedicamentDAO extends DAO<Medicament> {
         }
         catch (SQLException e) {
             System.out.println("Erreur : " + e);
+        }
+    }
+    /**
+     * Methode qui recherche un médicament sur son nom
+     * @param nomrech
+     * @return
+     * @throws SQLException 
+     */
+    
+    public List<Medicament> rechNom(String nomrech) throws SQLException {
+        List<Medicament> plusieurs = new ArrayList<>();
+        String req = "select * from medicament where nom = ?";
+
+        try (PreparedStatement pstm = dbConnect.prepareStatement(req)) {
+            pstm.setString(1, nomrech);
+            try (ResultSet rs = pstm.executeQuery()) {
+                boolean trouve = false;
+                while (rs.next()) {
+                    trouve = true;
+                    int idmed = rs.getInt("IDMEDOC");
+                    String nom = rs.getString("NOM");
+                    String description = rs.getString("DESCRIPTION");
+                    plusieurs.add(new Medicament(idmed,nom,description));
+                }
+
+                if (!trouve) {
+                    throw new SQLException("nom inconnu");
+                } else {
+                    return plusieurs;
+                }
+            }
+        }             
+    }
+    /**
+     * Méthode de recherche partielle sur un mot clé de la description
+     * Cette partie est inspirée du code de Hugo Delmarche
+     * @param desc
+     * @return
+     * @throws SQLException 
+     */
+    
+    public List<Medicament> rechDesc(String desc) throws SQLException{
+        List<Medicament> plusieurs2 = new ArrayList<>();
+        String req2 = "SELECT * FROM medicament WHERE description LIKE ?";
+        try (PreparedStatement pstm = dbConnect.prepareStatement(req2)) {
+            pstm.setString(1, "%" + desc + "%");
+            try (ResultSet rs = pstm.executeQuery()) {
+                boolean trouve = false;
+                while (rs.next()) {
+                    trouve = true;
+                    int idmed = rs.getInt("IDMEDOC");
+                    String nom = rs.getString("NOM");
+                    String description = rs.getString("DESCRIPTION");
+                    plusieurs2.add(new Medicament(idmed,nom,description));
+                }
+
+                if (!trouve) {
+                    throw new SQLException("nom inconnu");
+                } else {
+                    return plusieurs2;
+                }
+            }
         }
     }
 

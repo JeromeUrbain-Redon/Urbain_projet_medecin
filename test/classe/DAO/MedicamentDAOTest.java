@@ -5,6 +5,7 @@
  */
 package classe.DAO;
 
+import java.util.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import medecin.metier.Medicament;
@@ -70,10 +71,10 @@ public class MedicamentDAOTest {
         instance.setConnection(dbConnect);
         Medicament expResult = new Medicament(0,"TestNom","TestDescription");
         Medicament result = instance.create(obj);
-        assertEquals(expResult, result);
+        assertEquals("noms différents",expResult.getNom(), result.getNom());
         assertNotEquals("id non généré",expResult.getIdmedoc(),result.getIdmedoc());
         int idmedoc=result.getIdmedoc();
-        obj=new Medicament(0,"TestNom","TestDescription");
+        obj=new Medicament(0,"TestNom","TestDescription2");
         try{
             Medicament result2 = instance.create(obj);
             fail("exception de doublon non déclenchée");
@@ -103,12 +104,21 @@ public class MedicamentDAOTest {
         System.out.println("read");
         int idmedoc = 0;
         MedicamentDAO instance = new MedicamentDAO();
-        Medicament expResult = null;
+        instance.setConnection(dbConnect);
+        Medicament obj = new Medicament(0,"TestNom","TestDescription");
+        Medicament expResult = instance.create(obj);
+        idmedoc=expResult.getIdmedoc();
         Medicament result = instance.read(idmedoc);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+        assertEquals("noms différents",expResult.getNom(), result.getNom());
+        assertEquals("id différents",expResult.getIdmedoc(),result.getIdmedoc());
+             try{
+                result=instance.read(0);
+                fail("exception d'id inconnu non générée");
+            }
+            catch(SQLException e){}
+            instance.delete(result);
+        }
+   
 
     /**
      * Test of update method, of class MedicamentDAO.
@@ -116,13 +126,17 @@ public class MedicamentDAOTest {
     @Test
     public void testUpdate() throws Exception {
         System.out.println("update");
-        Medicament obj = null;
+        Medicament obj = new Medicament(0,"TestNom","TestDescription");
         MedicamentDAO instance = new MedicamentDAO();
-        Medicament expResult = null;
+        instance.setConnection(dbConnect);
+        obj = instance.create(obj);
+        obj.setNom("TestNom2");
+        obj.setDescription("TestDescription2");
+        Medicament expResult = obj;      
         Medicament result = instance.update(obj);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult.getNom(), result.getNom());
+        assertEquals(expResult.getDescription(),result.getDescription());
+        instance.delete(obj);
     }
 
     /**
@@ -143,12 +157,17 @@ public class MedicamentDAOTest {
     @Test
     public void testDelete() throws Exception {
         System.out.println("delete");
-        Medicament obj = null;
+        Medicament obj = new Medicament(0,"TestNom","TestDescription");
         MedicamentDAO instance = new MedicamentDAO();
+        instance.setConnection(dbConnect);
+        obj = instance.create(obj);
         instance.delete(obj);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+        try {
+            instance.read(obj.getIdmedoc());
+            fail("exception de record introuvable non générée");
+        }
+        catch(SQLException e){}
+            }
 
     /**
      * Test of suppr method, of class MedicamentDAO.
@@ -160,6 +179,29 @@ public class MedicamentDAOTest {
         instance.suppr();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
+    }
+    
+    @Test
+    public void testRechDesc() throws Exception{
+        System.out.println("recherche");
+        Medicament obj = new Medicament(0,"TestNom","TestDescription2");
+        Medicament obj2 = new Medicament(0,"TestNom2","TestDescription2");
+        String rech = "TestDescription2";
+        MedicamentDAO instance = new MedicamentDAO();
+        instance.setConnection(dbConnect);
+        obj = instance.create(obj);
+        obj2 = instance.create(obj2);
+        List<Medicament> result = instance.rechDesc(rech);
+        instance.delete(obj);
+        instance.delete(obj2);
+        
+        if(result.indexOf(obj)<0){
+            fail("Aucun record trouvé "+obj);
+        }
+        
+        if(result.indexOf(obj2)<0){
+            fail("Aucun record trouvé "+obj2);
+        }
     }
     
 }

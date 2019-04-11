@@ -33,6 +33,7 @@ public class MedecinDAO extends DAO<Medecin> {
     @Override
     public void menu() throws SQLException{
         Scanner sc = new Scanner(System.in);
+        Scanner sc2 = new Scanner(System.in);
         int choix;
         do{
             
@@ -48,16 +49,17 @@ public class MedecinDAO extends DAO<Medecin> {
             System.out.println("2.Afficher les medecins");
             System.out.println("3.Modifier un medecin");
             System.out.println("4.Supprimer un medecin");
-            System.out.println("5.Retour");
+            System.out.println("5.Rechercher un medecin sur son nom");
+            System.out.println("6.Retour");
             
             do {
                 System.out.println("Choix ?");
                 choix = sc.nextInt();
-                if (choix < 1 || choix > 5) {
+                if (choix < 1 || choix > 6) {
                     System.out.println("choix incorrect");
                 }
 
-            } while (choix < 1 || choix > 5);
+            } while (choix < 1 || choix > 6);
             
             switch(choix){
                 case 1:
@@ -84,7 +86,21 @@ public class MedecinDAO extends DAO<Medecin> {
                     System.out.println("== Suppresion d'un medecin ==");
                     suppr();
                     break;
-                case 5:
+                case 5 :
+                    System.out.println("== Recherche sur le nom ==");
+                    System.out.println("Entrez le nom recherché : ");
+                    String nom = sc2.nextLine();
+                    try {
+                        //appel de la méthode de recherche sur le nom
+                        List<Medecin> amed = rechNom(nom);
+                        for (Medecin med : amed) {
+                            System.out.println(med);
+                        }
+                    }catch (SQLException e) {
+                        System.out.println("erreur " + e.getMessage());
+                    }
+                    break;
+                case 6:
                     System.out.println("Retour au menu");
                     //Retour au menu princpal
                     DemoGestion dg = new DemoGestion();
@@ -92,7 +108,7 @@ public class MedecinDAO extends DAO<Medecin> {
                     break;
             }
                 
-        }while(choix!=5);
+        }while(choix!=6);
     }
     /**
      * création d'un medecin sur base des valeurs de son objet métier
@@ -310,6 +326,33 @@ public class MedecinDAO extends DAO<Medecin> {
         catch (SQLException e) {
             System.out.println("Erreur : " + e);
         }
+    }
+    
+    public List<Medecin> rechNom(String nomrech) throws SQLException {
+        List<Medecin> plusieurs = new ArrayList<>();
+        String req = "select * from medecin where nom = ?";
+
+        try (PreparedStatement pstm = dbConnect.prepareStatement(req)) {
+            pstm.setString(1, nomrech);
+            try (ResultSet rs = pstm.executeQuery()) {
+                boolean trouve = false;
+                while (rs.next()) {
+                    trouve = true;
+                    int idmed = rs.getInt("IDMED");
+                    String matricule = rs.getString("MATRICULE");
+                    String nom = rs.getString("NOM");
+                    String prenom = rs.getString("PRENOM");
+                    String tel = rs.getString("TEL");
+                    plusieurs.add(new Medecin(idmed,matricule,nom,prenom,tel));
+                }
+
+                if (!trouve) {
+                    throw new SQLException("nom inconnu");
+                } else {
+                    return plusieurs;
+                }
+            }
+        }             
     }
     
 }
