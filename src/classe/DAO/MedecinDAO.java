@@ -228,14 +228,6 @@ public class MedecinDAO extends DAO<Medecin> {
         Scanner sc = new Scanner(System.in);
         String req = "update medecin set matricule=?, nom=?,prenom=?,tel=? where idmed= ?";
         try (PreparedStatement pstm = dbConnect.prepareStatement(req)){
-            System.out.println("Nouveau matricule ? ");
-            m=sc.nextLine();
-            System.out.println("Nouveau nom ? ");
-            name=sc.nextLine();
-            System.out.println("Nouveau prenom ? ");
-            p=sc.nextLine();
-            System.out.println("Nouveau numero de tel ? ");
-            t=sc.nextLine();
             pstm.setInt(5, obj.getIdmed());
             pstm.setString(1, obj.getMatricule());
             pstm.setString(2, obj.getNom());
@@ -255,6 +247,7 @@ public class MedecinDAO extends DAO<Medecin> {
      */
     public void modif() throws SQLException{
         Scanner sc = new Scanner(System.in);
+        Scanner sc2 = new Scanner(System.in);
         System.out.println("Quel est l'id du medecin à modifier ? ");
         id=sc.nextInt();
         stmt = dbConnect.createStatement();
@@ -267,6 +260,14 @@ public class MedecinDAO extends DAO<Medecin> {
                 tel = rs.getString("TEL");
                 }
         }
+        System.out.println("Nouveau matricule ? ");
+        matricule=sc2.nextLine();
+        System.out.println("Nouveau nom ? ");
+        nom=sc2.nextLine();
+        System.out.println("Nouveau prenom ? ");
+        prenom=sc2.nextLine();
+        System.out.println("Nouveau numero de tel ? ");
+        tel=sc2.nextLine();
         med = new Medecin(id,matricule,nom,prenom,tel);
         try{
             update(med);

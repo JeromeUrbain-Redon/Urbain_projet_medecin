@@ -216,12 +216,6 @@ public class PatientDAO extends DAO<Patient>{
         Scanner sc = new Scanner(System.in);
         String req = "update patient set nom=?,prenom=?,tel=? where idpat= ?";
         try (PreparedStatement pstm = dbConnect.prepareStatement(req)){
-            System.out.println("Nouveau nom ? ");
-            name=sc.nextLine();
-            System.out.println("Nouveau prenom ? ");
-            p=sc.nextLine();
-            System.out.println("Nouveau numero de tel ? ");
-            t=sc.nextLine();
             pstm.setInt(4, obj.getIdpat());
             pstm.setString(1, obj.getNom());
             pstm.setString(2, obj.getPrenom());
@@ -235,11 +229,12 @@ public class PatientDAO extends DAO<Patient>{
     }
     
     /**
-     * Methode pour encoder les données à mettre à jour dans la table medicament
+     * Methode pour encoder les données à mettre à jour dans la table patient
      * @throws SQLException
      */
     public void modif() throws SQLException{
         Scanner sc = new Scanner(System.in);
+        Scanner sc2 = new Scanner(System.in);
         System.out.println("Quel est l'id du patient à modifier ? ");
         id=sc.nextInt();
         stmt = dbConnect.createStatement();
@@ -251,6 +246,12 @@ public class PatientDAO extends DAO<Patient>{
                 tel = rs.getString("TEL");
                 }
         }
+        System.out.println("Nouveau nom ? ");
+        nom=sc2.nextLine();
+        System.out.println("Nouveau prenom ? ");
+        prenom=sc2.nextLine();
+        System.out.println("Nouveau numero de tel ? ");
+        tel=sc2.nextLine();
         pat = new Patient(id,nom,prenom,tel);
         try{
             update(pat);
@@ -287,7 +288,7 @@ public class PatientDAO extends DAO<Patient>{
     }
     
     /** 
-     * Methode pour encoder l'indentifiant du médecin à supprimer
+     * Methode pour encoder l'indentifiant du patient à supprimer
      * @throws SQLException
      */
     public void suppr() throws SQLException{

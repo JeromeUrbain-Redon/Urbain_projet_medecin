@@ -9,49 +9,73 @@ package medecin.metier;
  *
  * @author jerom
  */
-public class Prescription {
+public class Infos {
     
     /**
-     * Identifiant unique d'une prescription
+     *
+     */
+    protected int idinfo;
+    
+    /**
+     *
      */
     protected int idpres;
     
     /**
-     * Date d'une prescription
+     *
      */
-    protected String datepres;
+    protected int idmedoc;
     
     /**
-     * Identifiant unique du medecin qui prescrit
+     *
      */
-    protected int idmed;
+    protected int quantite;
     
     /**
-     * Identifiant unique du patient concerné par la prescription
+     *
      */
-    protected int idpat;
+    protected String unite;
     
     /**
-     * Constructeur par défaut
+     * Constricteur par défaut
      */
+           
     
-    public Prescription(){
+    public Infos(){
         
     }
     
     /**
      * Constructeur paramétré
+     * @param idinfo
      * @param idpres
-     * @param datepres
-     * @param idmed
-     * @param idpat
+     * @param idmedoc
+     * @param quantite
+     * @param unite
      */
     
-    public Prescription(int idpres,String datepres,int idmed,int idpat){
+    public Infos(int idinfo,int idpres,int idmedoc,int quantite,String unite){
+        this.idinfo=idinfo;
         this.idpres=idpres;
-        this.datepres=datepres;
-        this.idmed=idmed;
-        this.idpat=idpat;
+        this.idmedoc=idmedoc;
+        this.quantite=quantite;
+        this.unite=unite;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getIdinfo() {
+        return idinfo;
+    }
+
+    /**
+     *
+     * @param idinfo
+     */
+    public void setIdinfo(int idinfo) {
+        this.idinfo = idinfo;
     }
 
     /**
@@ -74,59 +98,59 @@ public class Prescription {
      *
      * @return
      */
-    public String getDatepres() {
-        return datepres;
+    public int getIdmedoc() {
+        return idmedoc;
     }
 
     /**
      *
-     * @param datepres
+     * @param idmedoc
      */
-    public void setDatepres(String datepres) {
-        this.datepres = datepres;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getIdmed() {
-        return idmed;
-    }
-
-    /**
-     *
-     * @param idmed
-     */
-    public void setIdmed(int idmed) {
-        this.idmed = idmed;
+    public void setIdmedoc(int idmedoc) {
+        this.idmedoc = idmedoc;
     }
 
     /**
      *
      * @return
      */
-    public int getIdpat() {
-        return idpat;
+    public int getQuantite() {
+        return quantite;
     }
 
     /**
      *
-     * @param idpat
+     * @param quantite
      */
-    public void setIdpat(int idpat) {
-        this.idpat = idpat;
+    public void setQuantite(int quantite) {
+        this.quantite = quantite;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getUnite() {
+        return unite;
+    }
+
+    /**
+     *
+     * @param unite
+     */
+    public void setUnite(String unite) {
+        this.unite = unite;
     }
 
     @Override
     public String toString() {
-        return "Prescription{" + "idpres=" + idpres + ", datepres=" + datepres + ", idmed=" + idmed + ", idpat=" + idpat + '}';
+        return "Infos{" + "idinfo=" + idinfo + ", idpres=" + idpres + ", idmedoc=" + idmedoc + ", quantite=" + quantite + ", unite=" + unite + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 47 * hash + this.idpres;
+        hash = 61 * hash + this.idinfo;
         return hash;
     }
 
@@ -141,9 +165,10 @@ public class Prescription {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Prescription other = (Prescription) obj;
+        final Infos other = (Infos) obj;
         return true;
     }
+    
     
     
 }

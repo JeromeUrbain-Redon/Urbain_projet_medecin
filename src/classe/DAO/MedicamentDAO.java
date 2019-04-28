@@ -238,14 +238,8 @@ public class MedicamentDAO extends DAO<Medicament> {
         if (dbConnect == null) {
             System.exit(1);
         }
-        Scanner sc2 = new Scanner(System.in);
-        String name,d;
         String req = "update medicament set nom=?,description=? where idmedoc= ?";
         try (PreparedStatement pstm = dbConnect.prepareStatement(req)) {
-            /*System.out.println("Nouveau nom ? ");
-            name=sc2.nextLine();
-            System.out.println("Nouvelle description ? ");
-            d=sc2.nextLine();*/
             pstm.setInt(3, obj.getIdmedoc());
             pstm.setString(1,obj.getNom());
             pstm.setString(2,obj.getDescription());
