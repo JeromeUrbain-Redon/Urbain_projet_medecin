@@ -66,19 +66,27 @@ public class MedicamentDAOTest {
     @Test
     public void testCreate() throws Exception {
         System.out.println("create");
-        Medicament obj = new Medicament(0,"TestNom","TestDescription");
+        Medicament obj = new Medicament(0,"TestNom","TestDescription","TestCode");
         MedicamentDAO instance = new MedicamentDAO();
         instance.setConnection(dbConnect);
-        Medicament expResult = new Medicament(0,"TestNom","TestDescription");
+        Medicament expResult = new Medicament(0,"TestNom","TestDescription","TestCode");
         Medicament result = instance.create(obj);
         assertEquals("noms différents",expResult.getNom(), result.getNom());
+        assertEquals("codes différents",expResult.getCode(), result.getCode());
         assertNotEquals("id non généré",expResult.getIdmedoc(),result.getIdmedoc());
         int idmedoc=result.getIdmedoc();
-        obj=new Medicament(0,"TestNom","TestDescription2");
+        obj=new Medicament(0,"TestNom","TestDescription2","TestCode2");
         try{
             Medicament result2 = instance.create(obj);
             fail("exception de doublon non déclenchée");
             instance.delete(result2);
+        }
+        catch(SQLException e){}
+        obj=new Medicament(0,"TestNom2","TestDescription2","TestCode");
+        try{
+            Medicament result3 = instance.create(obj);
+            fail("exception de doublon non déclenchée");
+            instance.delete(result3);
         }
         catch(SQLException e){}
         instance.delete(result);
@@ -105,11 +113,12 @@ public class MedicamentDAOTest {
         int idmedoc = 0;
         MedicamentDAO instance = new MedicamentDAO();
         instance.setConnection(dbConnect);
-        Medicament obj = new Medicament(0,"TestNom","TestDescription");
+        Medicament obj = new Medicament(0,"TestNom","TestDescription","TestCode");
         Medicament expResult = instance.create(obj);
         idmedoc=expResult.getIdmedoc();
         Medicament result = instance.read(idmedoc);
         assertEquals("noms différents",expResult.getNom(), result.getNom());
+        assertEquals("codes différents",expResult.getCode(), result.getCode());
         assertEquals("id différents",expResult.getIdmedoc(),result.getIdmedoc());
              try{
                 result=instance.read(0);
@@ -126,16 +135,18 @@ public class MedicamentDAOTest {
     @Test
     public void testUpdate() throws Exception {
         System.out.println("update");
-        Medicament obj = new Medicament(0,"TestNom","TestDescription");
+        Medicament obj = new Medicament(0,"TestNom","TestDescription","TestCode");
         MedicamentDAO instance = new MedicamentDAO();
         instance.setConnection(dbConnect);
         obj = instance.create(obj);
         obj.setNom("TestNom2");
         obj.setDescription("TestDescription2");
+        obj.setCode("TestCode2");
         Medicament expResult = obj;      
         Medicament result = instance.update(obj);
         assertEquals(expResult.getNom(), result.getNom());
         assertEquals(expResult.getDescription(),result.getDescription());
+        assertEquals(expResult.getCode(), result.getCode());
         instance.delete(obj);
     }
 
@@ -157,7 +168,7 @@ public class MedicamentDAOTest {
     @Test
     public void testDelete() throws Exception {
         System.out.println("delete");
-        Medicament obj = new Medicament(0,"TestNom","TestDescription");
+        Medicament obj = new Medicament(0,"TestNom","TestDescription","TestCode");
         MedicamentDAO instance = new MedicamentDAO();
         instance.setConnection(dbConnect);
         obj = instance.create(obj);
@@ -184,8 +195,8 @@ public class MedicamentDAOTest {
     @Test
     public void testRechDesc() throws Exception{
         System.out.println("recherche");
-        Medicament obj = new Medicament(0,"TestNom","TestDescription2");
-        Medicament obj2 = new Medicament(0,"TestNom2","TestDescription2");
+        Medicament obj = new Medicament(0,"TestNom","TestDescription2","TestCode");
+        Medicament obj2 = new Medicament(0,"TestNom2","TestDescription2","TestCode2");
         String rech = "TestDescription2";
         MedicamentDAO instance = new MedicamentDAO();
         instance.setConnection(dbConnect);

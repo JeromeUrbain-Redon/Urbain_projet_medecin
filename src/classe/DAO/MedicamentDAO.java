@@ -18,7 +18,7 @@ import urbain_projet_medecin.DemoGestion;
  */
 public class MedicamentDAO extends DAO<Medicament> {
 
-    String nom, description = "";
+    String nom, description,code = "";
     Statement stmt;
     ResultSet rs = null;
     Medicament medoc;
@@ -121,10 +121,6 @@ public class MedicamentDAO extends DAO<Medicament> {
                     }
                     break;
                 case 7:
-                    System.out.println("Retour au menu");
-                    //Retour au menu principal
-                    DemoGestion dg = new DemoGestion();
-                    dg.gestion();
                     break;
             }
 
@@ -140,22 +136,24 @@ public class MedicamentDAO extends DAO<Medicament> {
      */
     @Override
     public Medicament create(Medicament obj) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
-        String req1 = "insert into medicament(nom,description) values(?,?)";
-        String req2 = "select idmedoc from medicament where nom=? and description= ?";
+        String req1 = "insert into medicament(nom,description,code) values(?,?,?)";
+        String req2 = "select idmedoc from medicament where nom=? and description= ? and code=?";
         try (PreparedStatement pstm = dbConnect.prepareStatement(req1);
                 PreparedStatement pstm2 = dbConnect.prepareStatement(req2)) {
             pstm.setString(1, obj.getNom());
             pstm.setString(2, obj.getDescription());
+            pstm.setString(3, obj.getCode());
             int n = pstm.executeUpdate();
             if (n == 0) {
                 throw new SQLException("erreur de creation médicament, aucune ligne créée");
             }
             pstm2.setString(1, obj.getNom());
             pstm2.setString(2, obj.getDescription());
+            pstm2.setString(3, obj.getCode());
             try (ResultSet rs = pstm2.executeQuery()) {
                 if (rs.next()) {
                     int idmedoc = rs.getInt(1);
@@ -184,8 +182,10 @@ public class MedicamentDAO extends DAO<Medicament> {
         nom = sc2.nextLine();
         System.out.println("Entrez la description de ce médicament");
         description = sc2.nextLine();
+        System.out.println("Entrez le code alphanumérique du médicament");
+        code=sc2.nextLine();
         id = 0;
-        medoc = new Medicament(id, nom, description);
+        medoc = new Medicament(id, nom, description,code);
         //System.out.println(id + nom + description);
         try {
             medoc = create(medoc);
@@ -204,7 +204,7 @@ public class MedicamentDAO extends DAO<Medicament> {
      */
     @Override
     public Medicament read(int idmedoc) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -216,8 +216,9 @@ public class MedicamentDAO extends DAO<Medicament> {
                 if (rs.next()) {
                     String nom = rs.getString("NOM");
                     String description = rs.getString("DESCRIPTION");
-                    System.out.println(nom + " : " + description);
-                    return new Medicament(idmedoc, nom, description);
+                    String code = rs.getString("CODE");
+                    System.out.println(nom + ": " + description + "\tcode:" + code);
+                    return new Medicament(idmedoc, nom, description,code);
                 } else {
                     throw new SQLException("Code inconnu");
                 }
@@ -234,15 +235,16 @@ public class MedicamentDAO extends DAO<Medicament> {
      */
     @Override
     public Medicament update(Medicament obj) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
-        String req = "update medicament set nom=?,description=? where idmedoc= ?";
+        String req = "update medicament set nom=?,description=?,code=? where idmedoc= ?";
         try (PreparedStatement pstm = dbConnect.prepareStatement(req)) {
-            pstm.setInt(3, obj.getIdmedoc());
+            pstm.setInt(4, obj.getIdmedoc());
             pstm.setString(1,obj.getNom());
             pstm.setString(2,obj.getDescription());
+            pstm.setString(3,obj.getCode());
             int n = pstm.executeUpdate();
             if (n == 0) {
                 throw new SQLException("aucune ligne médicament mise à jour");
@@ -269,13 +271,16 @@ public class MedicamentDAO extends DAO<Medicament> {
             if(rs.getInt("IDMEDOC") == id){
                 nom = rs.getString("NOM");
                 description = rs.getString("DESCRIPTION");
+                code = rs.getString("CODE");
                 }
         }
         System.out.println("Nouveau nom ? ");
         nom=sc2.nextLine();
         System.out.println("Nouvelle description ? ");
         description=sc2.nextLine();
-        medoc = new Medicament(id,nom,description);
+        System.out.println("Nouveau code ? ");
+        code=sc2.nextLine();
+        medoc = new Medicament(id,nom,description,code);
         try{
             update(medoc);
             System.out.println("Modification effectuée");
@@ -296,7 +301,7 @@ public class MedicamentDAO extends DAO<Medicament> {
      */
     @Override
     public void delete(Medicament obj) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -326,9 +331,10 @@ public class MedicamentDAO extends DAO<Medicament> {
             if(rs.getInt("IDMEDOC") == id){
                 nom = rs.getString("NOM");
                 description = rs.getString("DESCRIPTION");
+                code = rs.getString("CODE");
                 }
         }
-        medoc = new Medicament(id,nom,description);
+        medoc = new Medicament(id,nom,description,code);
         try{
         delete(medoc);
         System.out.println("Suppression effectuée");
@@ -357,7 +363,8 @@ public class MedicamentDAO extends DAO<Medicament> {
                     int idmed = rs.getInt("IDMEDOC");
                     String nom = rs.getString("NOM");
                     String description = rs.getString("DESCRIPTION");
-                    plusieurs.add(new Medicament(idmed,nom,description));
+                    String code = rs.getString("CODE");
+                    plusieurs.add(new Medicament(idmed,nom,description,code));
                 }
 
                 if (!trouve) {
@@ -388,7 +395,8 @@ public class MedicamentDAO extends DAO<Medicament> {
                     int idmed = rs.getInt("IDMEDOC");
                     String nom = rs.getString("NOM");
                     String description = rs.getString("DESCRIPTION");
-                    plusieurs2.add(new Medicament(idmed,nom,description));
+                    String code = rs.getString("CODE");
+                    plusieurs2.add(new Medicament(idmed,nom,description,code));
                 }
 
                 if (!trouve) {

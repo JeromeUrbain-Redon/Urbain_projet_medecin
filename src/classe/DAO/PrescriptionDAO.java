@@ -81,8 +81,6 @@ public class PrescriptionDAO extends DAO<Prescription>{
                     pres();
                     break;
                 case 6:
-                    DemoGestion dg = new DemoGestion();
-                    dg.gestion();
                     break;
             }
             

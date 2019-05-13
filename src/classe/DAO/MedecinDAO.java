@@ -101,10 +101,6 @@ public class MedecinDAO extends DAO<Medecin> {
                     }
                     break;
                 case 6:
-                    System.out.println("Retour au menu");
-                    //Retour au menu princpal
-                    DemoGestion dg = new DemoGestion();
-                    dg.gestion();
                     break;
             }
                 
@@ -119,7 +115,7 @@ public class MedecinDAO extends DAO<Medecin> {
      */
     @Override
     public Medecin create(Medecin obj) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -188,7 +184,7 @@ public class MedecinDAO extends DAO<Medecin> {
 
     @Override
     public Medecin read(int idmed) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -220,7 +216,7 @@ public class MedecinDAO extends DAO<Medecin> {
      */
     @Override
     public Medecin update(Medecin obj) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -285,7 +281,7 @@ public class MedecinDAO extends DAO<Medecin> {
      */
     @Override
     public void delete(Medecin obj) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }

@@ -30,6 +30,12 @@ public class Medicament {
     protected String description;
     
     /**
+     * Code unique du medicament
+    */
+    
+    protected String code;
+    
+    /**
      * Constructeur par défaut
      */
     
@@ -42,12 +48,14 @@ public class Medicament {
      * @param idmedoc
      * @param nom
      * @param description
+     * @param code
      */
     
-    public Medicament(int idmedoc,String nom,String description){
+    public Medicament(int idmedoc,String nom,String description,String code){
         this.idmedoc=idmedoc;
         this.nom=nom;
         this.description=description;
+        this.code=code;
     }
 
     
@@ -103,8 +111,27 @@ public class Medicament {
 
     @Override
     public String toString() {
-        return "Medicament{" + "idmedoc=" + idmedoc + ", nom=" + nom + ", description=" + description + '}';
+        return "Medicament{" + "idmedoc=" + idmedoc + ", nom=" + nom + ", description=" + description + ", code=" + code + '}';
     }
+
+    /**
+     * 
+     * @return 
+     */
+    
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * 
+     * @param code 
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    
 
     @Override
     public int hashCode() {

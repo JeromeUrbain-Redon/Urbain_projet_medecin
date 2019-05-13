@@ -98,10 +98,6 @@ public class PatientDAO extends DAO<Patient>{
                     }
                     break;
                 case 6:
-                    System.out.println("Retour au menu");
-                    //Retour au menu principal
-                    DemoGestion dg = new DemoGestion();
-                    dg.gestion();
                     break;
             }
                 
@@ -110,7 +106,7 @@ public class PatientDAO extends DAO<Patient>{
 
     @Override
     public Patient read(int idpat) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -143,7 +139,7 @@ public class PatientDAO extends DAO<Patient>{
 
     @Override
     public Patient create(Patient obj) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -208,7 +204,7 @@ public class PatientDAO extends DAO<Patient>{
 
     @Override
     public Patient update(Patient obj) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -271,7 +267,7 @@ public class PatientDAO extends DAO<Patient>{
 
     @Override
     public void delete(Patient obj) throws SQLException {
-        //Connection dbConnect = DBConnection.getConnection();
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
