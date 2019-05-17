@@ -10,8 +10,11 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import myconnections.DBConnection;
 import classe.DAO.PatientDAO;
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import medecin.metier.Patient;
 import static swing.windows.f;
 
@@ -31,6 +34,18 @@ public class Supprpat extends javax.swing.JPanel {
     int id;
     public Supprpat() {
         initComponents();
+    }
+    
+    static void PlaySound(File Sound){
+        try{
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(Sound));
+            clip.start();
+            
+            Thread.sleep(clip.getMicrosecondLength()/1000);
+        }catch(Exception e){
+        
+        }
     }
 
     /**
@@ -60,12 +75,14 @@ public class Supprpat extends javax.swing.JPanel {
         jLabel1.setText("Entrez le nom :");
         add(jLabel1);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 21)); // NOI18N
         jLabel2.setText("Suppression de patient");
         add(jLabel2);
+
+        nomRech.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         add(nomRech);
 
-        btRech.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btRech.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btRech.setText("Rechercher");
         btRech.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -86,7 +103,7 @@ public class Supprpat extends javax.swing.JPanel {
         lblPrenom.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         add(lblPrenom);
 
-        btValider.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btValider.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btValider.setText("Valider");
         btValider.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,7 +112,7 @@ public class Supprpat extends javax.swing.JPanel {
         });
         add(btValider);
 
-        btAnnuler.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btAnnuler.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btAnnuler.setText("Annuler");
         btAnnuler.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,6 +140,10 @@ public class Supprpat extends javax.swing.JPanel {
                     prenom = rs.getString("PRENOM");
                     tel = rs.getString("TEL");
                 }
+            }
+            if(nom.equals("Delmarche")){
+                File erreur = new File("C:\\Users\\jerom\\OneDrive\\Documents\\NetBeansProjects\\Urbain_projet_medecin\\build\\classes\\swing/maisilveutquoi.wav");
+                PlaySound(erreur);
             }
             String sid=String.valueOf(id);
             lblID.setText("ID : "+sid);

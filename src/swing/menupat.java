@@ -9,6 +9,8 @@ import static swing.windows.f;
 import java.sql.*;
 import medecin.metier.Patient;
 import classe.DAO.PatientDAO;
+import javax.swing.JOptionPane;
+import myconnections.DBConnection;
 
 /**
  *
@@ -19,6 +21,11 @@ public class menupat extends javax.swing.JPanel {
     /**
      * Creates new form menupat
      */
+    String nom,prenom,tel = "";
+    Statement stmt;
+    ResultSet rs = null;
+    Patient pat;
+    int id;
     public menupat() {
         initComponents();
     }
@@ -33,21 +40,24 @@ public class menupat extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         btCrea = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btAffiche = new javax.swing.JButton();
         btModif = new javax.swing.JButton();
         btSuppr = new javax.swing.JButton();
+        btRech = new javax.swing.JButton();
         btRetour = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(153, 204, 255));
-        setLayout(new java.awt.GridLayout(6, 1, 20, 20));
+        setLayout(new java.awt.GridLayout(4, 2, 20, 20));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Elephant", 1, 28)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Menu patient");
         add(jLabel1);
+        add(jLabel2);
 
-        btCrea.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btCrea.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btCrea.setText("Ajouter");
         btCrea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -56,11 +66,16 @@ public class menupat extends javax.swing.JPanel {
         });
         add(btCrea);
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Afficher");
-        add(jButton1);
+        btAffiche.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        btAffiche.setText("Afficher");
+        btAffiche.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAfficheActionPerformed(evt);
+            }
+        });
+        add(btAffiche);
 
-        btModif.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btModif.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btModif.setText("Modifier");
         btModif.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -69,7 +84,7 @@ public class menupat extends javax.swing.JPanel {
         });
         add(btModif);
 
-        btSuppr.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btSuppr.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btSuppr.setText("Supprimer");
         btSuppr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,7 +93,16 @@ public class menupat extends javax.swing.JPanel {
         });
         add(btSuppr);
 
-        btRetour.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btRech.setFont(new java.awt.Font("Tahoma", 0, 21)); // NOI18N
+        btRech.setText("Recherche sur le nom");
+        btRech.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btRechActionPerformed(evt);
+            }
+        });
+        add(btRech);
+
+        btRetour.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btRetour.setText("Retour");
         btRetour.setMaximumSize(new java.awt.Dimension(20, 10));
         btRetour.setMinimumSize(new java.awt.Dimension(20, 10));
@@ -118,13 +142,41 @@ public class menupat extends javax.swing.JPanel {
         f.setSize(550,450);
     }//GEN-LAST:event_btSupprActionPerformed
 
+    private void btAfficheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAfficheActionPerformed
+        try {
+            Connection dbConnect = DBConnection.getConnection();
+            String aff="Liste des patients : ";
+            stmt = dbConnect.createStatement();
+            rs = stmt.executeQuery("select * from patient");
+            while(rs.next()){                
+                    id=rs.getInt("IDPAT");
+                    nom=rs.getString("NOM");
+                    prenom = rs.getString("PRENOM");
+                    tel = rs.getString("TEL");
+                    aff += "\n" +" "+ id +"\t "+ nom +"\t "+ prenom +"\t "+ tel;
+            }
+            JOptionPane.showMessageDialog(this,aff,"Résultat",JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,e,"Erreur",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btAfficheActionPerformed
+
+    private void btRechActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRechActionPerformed
+        f.setContentPane(new Rechnom());
+        f.repaint();
+        f.revalidate();
+        f.setSize(550,450);
+    }//GEN-LAST:event_btRechActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btAffiche;
     private javax.swing.JButton btCrea;
     private javax.swing.JButton btModif;
+    private javax.swing.JButton btRech;
     private javax.swing.JButton btRetour;
     private javax.swing.JButton btSuppr;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

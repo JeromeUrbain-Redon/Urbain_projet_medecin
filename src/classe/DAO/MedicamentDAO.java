@@ -23,6 +23,8 @@ public class MedicamentDAO extends DAO<Medicament> {
     ResultSet rs = null;
     Medicament medoc;
     int id;
+    public static String plusieurs2;
+    public static String listemedoc;
 
     public MedicamentDAO() {
         //this.stmt = null;
@@ -106,7 +108,7 @@ public class MedicamentDAO extends DAO<Medicament> {
                         System.out.println("erreur " + e.getMessage());
                     }
                     break;
-                case 6:
+                case 6:/*
                     System.out.println("== Recherche partielle sur la description ==");
                     System.out.println("Entrez le mot clé de votre recherche : ");
                     String desc = sc2.nextLine();
@@ -118,7 +120,7 @@ public class MedicamentDAO extends DAO<Medicament> {
                         }
                     }catch (SQLException e) {
                         System.out.println("erreur " + e.getMessage());
-                    }
+                    }*/
                     break;
                 case 7:
                     break;
@@ -383,8 +385,34 @@ public class MedicamentDAO extends DAO<Medicament> {
      * @throws SQLException 
      */
     
+    public String rechDesc2(String desc) throws SQLException{
+        Connection dbConnect = DBConnection.getConnection();
+        String req2 = "SELECT * FROM medicament WHERE description LIKE ?";
+        try (PreparedStatement pstm = dbConnect.prepareStatement(req2)) {
+            pstm.setString(1, "%" + desc + "%");
+            try (ResultSet rs = pstm.executeQuery()) {
+                boolean trouve = false;
+                plusieurs2 = "Médicaments correspondants : ";
+                while (rs.next()) {
+                    trouve = true;
+                    int idmed = rs.getInt("IDMEDOC");
+                    String nom = rs.getString("NOM");
+                    String description = rs.getString("DESCRIPTION");
+                    String code = rs.getString("CODE");
+                    plusieurs2 += "\n" +" "+ code +"\t "+ nom +"\t "+ description;
+                }
+
+                if (!trouve) {
+                    throw new SQLException("nom inconnu");
+                } else {
+                    return plusieurs2;
+                }
+            }
+        }
+    }
+    
     public List<Medicament> rechDesc(String desc) throws SQLException{
-        List<Medicament> plusieurs2 = new ArrayList<>();
+        List<Medicament> plusieurs3 = new ArrayList<>();
         String req2 = "SELECT * FROM medicament WHERE description LIKE ?";
         try (PreparedStatement pstm = dbConnect.prepareStatement(req2)) {
             pstm.setString(1, "%" + desc + "%");
@@ -396,13 +424,13 @@ public class MedicamentDAO extends DAO<Medicament> {
                     String nom = rs.getString("NOM");
                     String description = rs.getString("DESCRIPTION");
                     String code = rs.getString("CODE");
-                    plusieurs2.add(new Medicament(idmed,nom,description,code));
+                    plusieurs3.add(new Medicament(idmed,nom,description,code));
                 }
 
                 if (!trouve) {
                     throw new SQLException("nom inconnu");
                 } else {
-                    return plusieurs2;
+                    return plusieurs3;
                 }
             }
         }

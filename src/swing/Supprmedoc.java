@@ -63,6 +63,8 @@ public class Supprmedoc extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
         jLabel2.setText("Suppresion de médicament");
         add(jLabel2);
+
+        nomRech.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         add(nomRech);
 
         btRech.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N

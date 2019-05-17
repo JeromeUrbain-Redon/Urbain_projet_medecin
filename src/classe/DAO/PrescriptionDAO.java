@@ -97,6 +97,7 @@ public class PrescriptionDAO extends DAO<Prescription>{
 
     @Override
     public Prescription read(int idpres) throws SQLException {
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -106,8 +107,8 @@ public class PrescriptionDAO extends DAO<Prescription>{
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
                     String datepres = rs.getString("DATEPRES");
-                    int idmed = rs.getInt("idmed");
-                    int idpat = rs.getInt("idpat");
+                    int idmed = rs.getInt("IDMED");
+                    int idpat = rs.getInt("IDPAT");
                     System.out.println(idpres+"\tMedecin: "+idmed+"\tPatient: "+idpat+"\tDate: "+datepres);
                     return new Prescription(idpres, datepres, idmed, idpat);
                 } else {
@@ -127,11 +128,12 @@ public class PrescriptionDAO extends DAO<Prescription>{
 
     @Override
     public Prescription create(Prescription obj) throws SQLException {
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
-        String req1 = "insert into prescription(idpres,datepres,idmed,idpat) values(?,?,?,?)";
-        String req2 = "select idpres from prescription where datepres=? and idmed= ?, and idpat=?";
+        String req1 = "insert into prescription(datepres,idmed,idpat) values(?,?,?)";
+        String req2 = "select idpres from prescription where datepres=? and idmed= ? and idpat=?";
         try (PreparedStatement pstm = dbConnect.prepareStatement(req1);
                 PreparedStatement pstm2 = dbConnect.prepareStatement(req2)){
             pstm.setString(1, obj.getDatepres());
@@ -192,6 +194,7 @@ public class PrescriptionDAO extends DAO<Prescription>{
 
     @Override
     public Prescription update(Prescription obj) throws SQLException {
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -255,6 +258,7 @@ public class PrescriptionDAO extends DAO<Prescription>{
 
     @Override
     public void delete(Prescription obj) throws SQLException {
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }

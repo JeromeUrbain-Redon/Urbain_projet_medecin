@@ -11,6 +11,9 @@ import medecin.metier.Medicament;
 import myconnections.DBConnection;
 import java.sql.*;
 import javax.swing.JOptionPane;
+import java.io.File;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 /**
  *
@@ -30,6 +33,18 @@ public class Creamedoc extends javax.swing.JPanel {
     
     public Creamedoc() {
         initComponents();
+    }
+    
+    static void PlaySound(File Sound){
+        try{
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(Sound));
+            clip.start();
+            
+            Thread.sleep(clip.getMicrosecondLength()/1000);
+        }catch(Exception e){
+        
+        }
     }
 
     /**
@@ -57,7 +72,7 @@ public class Creamedoc extends javax.swing.JPanel {
         setLayout(new java.awt.GridLayout(5, 2, 10, 10));
 
         jLabel1.setFont(new java.awt.Font("Comic Sans MS", 3, 24)); // NOI18N
-        jLabel1.setText("Création de Médecin");
+        jLabel1.setText("Création de médicament");
         add(jLabel1);
         add(jLabel2);
 
@@ -122,7 +137,12 @@ public class Creamedoc extends javax.swing.JPanel {
                 medoc=mdao.create(medoc);
                 JOptionPane.showMessageDialog(this,"Médicament créé avec succès","Succès",JOptionPane.INFORMATION_MESSAGE);
             }catch(SQLException e){
+                File erreur = new File("C:\\Users\\jerom\\OneDrive\\Documents\\NetBeansProjects\\Urbain_projet_medecin\\build\\classes\\swing/windows_error.wav");
+                PlaySound(erreur);                
                 JOptionPane.showMessageDialog(this,e,"Erreur",JOptionPane.INFORMATION_MESSAGE);
+                
+                
+                
             }
             f.setContentPane(new menumedoc());
             f.repaint();

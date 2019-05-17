@@ -31,7 +31,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="24" style="2"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Entrez le nom :"/>
+        <Property name="text" type="java.lang.String" value="Entrez l&apos;ID du medecin :"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

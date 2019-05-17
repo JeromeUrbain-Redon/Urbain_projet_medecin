@@ -5,31 +5,18 @@
  */
 package swing;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javax.swing.JOptionPane;
-import medecin.metier.Medecin;
-import classe.DAO.MedecinDAO;
-import myconnections.DBConnection;
 import static swing.windows.f;
 
 /**
  *
  * @author jerom
  */
-public class menumed extends javax.swing.JPanel {
+public class menupres extends javax.swing.JPanel {
 
     /**
-     * Creates new form menumed
+     * Creates new form menupres
      */
-    String matricule,nom,prenom,tel = "";
-    Statement stmt;
-    ResultSet rs = null;
-    Medecin med;
-    int id;
-    public menumed() {
+    public menupres() {
         initComponents();
     }
 
@@ -45,20 +32,21 @@ public class menumed extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         btCrea = new javax.swing.JButton();
         btAffiche = new javax.swing.JButton();
+        btAffiche2 = new javax.swing.JButton();
         btModif = new javax.swing.JButton();
         btSuppr = new javax.swing.JButton();
         btRetour = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(255, 204, 204));
-        setLayout(new java.awt.GridLayout(6, 1, 20, 20));
+        setBackground(new java.awt.Color(255, 204, 102));
+        setLayout(new java.awt.GridLayout(7, 1, 0, 10));
 
-        jLabel1.setFont(new java.awt.Font("Elephant", 1, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Elephant", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Menu Médecin");
+        jLabel1.setText("Menu prescriptions");
         add(jLabel1);
 
-        btCrea.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        btCrea.setText("Ajouter");
+        btCrea.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btCrea.setText("Effectuer une prescription");
         btCrea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btCreaActionPerformed(evt);
@@ -66,8 +54,8 @@ public class menumed extends javax.swing.JPanel {
         });
         add(btCrea);
 
-        btAffiche.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        btAffiche.setText("Afficher");
+        btAffiche.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btAffiche.setText("Afficher les prescriptions d'un patient");
         btAffiche.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btAfficheActionPerformed(evt);
@@ -75,8 +63,17 @@ public class menumed extends javax.swing.JPanel {
         });
         add(btAffiche);
 
-        btModif.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        btModif.setText("Modifier");
+        btAffiche2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btAffiche2.setText("Afficher les prescription rédigées d'un médecin");
+        btAffiche2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAffiche2ActionPerformed(evt);
+            }
+        });
+        add(btAffiche2);
+
+        btModif.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btModif.setText("Modifier les informations d'un prescription");
         btModif.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btModifActionPerformed(evt);
@@ -84,8 +81,8 @@ public class menumed extends javax.swing.JPanel {
         });
         add(btModif);
 
-        btSuppr.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        btSuppr.setText("Supprimer");
+        btSuppr.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btSuppr.setText("Supprimer une description");
         btSuppr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btSupprActionPerformed(evt);
@@ -93,7 +90,7 @@ public class menumed extends javax.swing.JPanel {
         });
         add(btSuppr);
 
-        btRetour.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        btRetour.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btRetour.setText("Retour");
         btRetour.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,49 +107,39 @@ public class menumed extends javax.swing.JPanel {
     }//GEN-LAST:event_btRetourActionPerformed
 
     private void btCreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCreaActionPerformed
-        f.setContentPane(new Creamed());
+        f.setContentPane(new Creapres());
         f.repaint();
         f.revalidate();
-        f.setSize(550,450);
     }//GEN-LAST:event_btCreaActionPerformed
 
     private void btAfficheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAfficheActionPerformed
-        try {
-            Connection dbConnect = DBConnection.getConnection();
-            String aff="Liste des médecins : ";
-            stmt = dbConnect.createStatement();
-            rs = stmt.executeQuery("select * from medecin");
-            while(rs.next()){                
-                    id=rs.getInt("IDMED");
-                    nom=rs.getString("NOM");
-                    prenom = rs.getString("PRENOM");
-                    tel = rs.getString("TEL");
-                    matricule = rs.getString("MATRICULE");
-                    aff += "\n" +" "+ id +"\t "+ matricule +"\t "+ nom +"\t "+ prenom +"\t "+ tel;
-            }
-            JOptionPane.showMessageDialog(this,aff,"Résultat",JOptionPane.INFORMATION_MESSAGE);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,e,"Erreur",JOptionPane.INFORMATION_MESSAGE);
-        }
-    }//GEN-LAST:event_btAfficheActionPerformed
-
-    private void btModifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModifActionPerformed
-        f.setContentPane(new Modifmed());
+        f.setContentPane(new Prespat());
         f.repaint();
         f.revalidate();
-        f.setSize(550,450);
+    }//GEN-LAST:event_btAfficheActionPerformed
+
+    private void btAffiche2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAffiche2ActionPerformed
+        f.setContentPane(new Presmed());
+        f.repaint();
+        f.revalidate();
+    }//GEN-LAST:event_btAffiche2ActionPerformed
+
+    private void btModifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModifActionPerformed
+        f.setContentPane(new Modifpres());
+        f.repaint();
+        f.revalidate();
     }//GEN-LAST:event_btModifActionPerformed
 
     private void btSupprActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSupprActionPerformed
-        f.setContentPane(new Supprmed());
+        f.setContentPane(new Supprpres());
         f.repaint();
         f.revalidate();
-        f.setSize(550,450);
     }//GEN-LAST:event_btSupprActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAffiche;
+    private javax.swing.JButton btAffiche2;
     private javax.swing.JButton btCrea;
     private javax.swing.JButton btModif;
     private javax.swing.JButton btRetour;

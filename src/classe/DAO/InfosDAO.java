@@ -16,15 +16,19 @@ import java.util.*;
 import medecin.metier.Infos;
 import myconnections.DBConnection;
 
+
 public class InfosDAO extends DAO<Infos>{
     
     Statement stmt;
     ResultSet rs = null;
     int id,idmedoc,idpres,quantite;
     String unite;
+    Infos info;
+    
 
     @Override
     public Infos read(int idinfo) throws SQLException {
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -34,7 +38,7 @@ public class InfosDAO extends DAO<Infos>{
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {                    
                     int idmedoc = rs.getInt("IDMEDOC");
-                    int idpat = rs.getInt("IDPRES");
+                    int idpres = rs.getInt("IDPRES");
                     int quantite = rs.getInt("QUANTITE");
                     String unite = rs.getString("UNITE");
                     System.out.println();
@@ -48,10 +52,11 @@ public class InfosDAO extends DAO<Infos>{
 
     @Override
     public Infos create(Infos obj) throws SQLException {
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
-        String req1 = "insert into infos(idinfo,idpres,idmedoc,quantite,unite) values(?,?,?,?,?)";
+        String req1 = "insert into infos(idpres,idmedoc,quantite,unite) values(?,?,?,?)";
         String req2 = "select idinfo from infos where idpres=? and idmedoc= ?, and quantite=?, and unite=? ";
         try (PreparedStatement pstm = dbConnect.prepareStatement(req1);
                 PreparedStatement pstm2 = dbConnect.prepareStatement(req2)){
@@ -82,6 +87,7 @@ public class InfosDAO extends DAO<Infos>{
 
     @Override
     public Infos update(Infos obj) throws SQLException {
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }
@@ -103,6 +109,7 @@ public class InfosDAO extends DAO<Infos>{
 
     @Override
     public void delete(Infos obj) throws SQLException {
+        Connection dbConnect = DBConnection.getConnection();
         if (dbConnect == null) {
             System.exit(1);
         }

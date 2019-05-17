@@ -31,7 +31,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Comic Sans MS" size="24" style="3"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Cr&#xe9;ation de M&#xe9;decin"/>
+        <Property name="text" type="java.lang.String" value="Cr&#xe9;ation de m&#xe9;dicament"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

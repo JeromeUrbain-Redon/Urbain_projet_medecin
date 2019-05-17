@@ -67,10 +67,10 @@ public class Supprmed extends javax.swing.JPanel {
         jLabel2.setText("Suppression de médecin");
         add(jLabel2);
 
-        nomRech.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        nomRech.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         add(nomRech);
 
-        btRech.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btRech.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btRech.setText("Rechercher");
         btRech.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -98,7 +98,7 @@ public class Supprmed extends javax.swing.JPanel {
         lblPrenom.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         add(lblPrenom);
 
-        btValider.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btValider.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btValider.setText("Valider");
         btValider.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -107,7 +107,7 @@ public class Supprmed extends javax.swing.JPanel {
         });
         add(btValider);
 
-        btAnnuler.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btAnnuler.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btAnnuler.setText("Annuler");
         btAnnuler.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

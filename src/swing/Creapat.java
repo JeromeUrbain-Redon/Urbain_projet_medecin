@@ -80,7 +80,7 @@ public class Creapat extends javax.swing.JPanel {
         txtTel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         add(txtTel);
 
-        btValider.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btValider.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btValider.setText("Valider");
         btValider.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,7 +89,7 @@ public class Creapat extends javax.swing.JPanel {
         });
         add(btValider);
 
-        btAnnuler.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btAnnuler.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btAnnuler.setText("Annuler");
         btAnnuler.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

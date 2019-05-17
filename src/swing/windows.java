@@ -75,11 +75,11 @@ public class windows extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 f.setVisible(true);
-                f.setContentPane(new menu());
+                f.setContentPane(new Accueil());
                 f.repaint();
                 f.revalidate();
                 f.setLocationRelativeTo(null);
-                f.setSize(550,450);
+                f.setSize(420,530);
                 f.setTitle("Pharmacie");
             }
         });

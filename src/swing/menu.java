@@ -33,13 +33,14 @@ public class menu extends javax.swing.JPanel {
         btMedoc = new javax.swing.JButton();
         btMed = new javax.swing.JButton();
         btPat = new javax.swing.JButton();
+        btPres = new javax.swing.JButton();
         btQuitter = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 153));
         setMinimumSize(new java.awt.Dimension(400, 300));
-        setLayout(new java.awt.GridLayout(5, 1, 0, 20));
+        setLayout(new java.awt.GridLayout(6, 1, 0, 15));
 
-        jLabel1.setFont(new java.awt.Font("Comic Sans MS", 1, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Elephant", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Menu principal");
         add(jLabel1);
@@ -70,6 +71,15 @@ public class menu extends javax.swing.JPanel {
             }
         });
         add(btPat);
+
+        btPres.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        btPres.setText("Prescription");
+        btPres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btPresActionPerformed(evt);
+            }
+        });
+        add(btPres);
 
         btQuitter.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btQuitter.setText("Quitter");
@@ -106,11 +116,19 @@ public class menu extends javax.swing.JPanel {
         System.exit(0);
     }//GEN-LAST:event_btQuitterActionPerformed
 
+    private void btPresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPresActionPerformed
+        f.setContentPane(new menupres());
+        f.repaint();
+        f.revalidate();
+        f.setSize(550,450);
+    }//GEN-LAST:event_btPresActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btMed;
     private javax.swing.JButton btMedoc;
     private javax.swing.JButton btPat;
+    private javax.swing.JButton btPres;
     private javax.swing.JButton btQuitter;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables

@@ -61,7 +61,7 @@ public class Modifpat extends javax.swing.JPanel {
         setLayout(new java.awt.GridLayout(7, 2, 20, 10));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 2, 24)); // NOI18N
-        jLabel1.setText("Entrez le nom :");
+        jLabel1.setText("Entrez l'ID du patient :");
         add(jLabel1);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -139,12 +139,13 @@ public class Modifpat extends javax.swing.JPanel {
     private void btRechActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRechActionPerformed
         try{
             Connection dbConnect = DBConnection.getConnection();
-            nom=nomRech.getText();
+            String ids=nomRech.getText();
+            id=Integer.parseInt(ids);
             stmt = dbConnect.createStatement();
             rs = stmt.executeQuery("select * from patient");
             while(rs.next()){
-                if(rs.getString("NOM").equals(nom)){
-                    id=rs.getInt("IDPAT");
+                if(rs.getInt("IDPAT")==(id)){
+                    nom=rs.getString("NOM");
                     prenom = rs.getString("PRENOM");
                     tel = rs.getString("TEL");
                 }
