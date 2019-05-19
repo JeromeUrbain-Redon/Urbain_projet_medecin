@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DesignPaterns;
+package DesignPatterns.observer;
 
 /**
  *
  * @author jerom
  */
-public class Prescription {
-    
+public abstract class Observer {
+    public abstract void update(String msg);
 }
