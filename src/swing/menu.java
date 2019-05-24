@@ -5,6 +5,9 @@
  */
 package swing;
 
+import java.io.File;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import static swing.windows.f;
 
 /**
@@ -18,6 +21,18 @@ public class menu extends javax.swing.JPanel {
      */
     public menu() {
         initComponents();
+    }
+    
+    static void PlaySound(File Sound){
+        try{
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(Sound));
+            clip.start();
+            
+            Thread.sleep(clip.getMicrosecondLength()/1000);
+        }catch(Exception e){
+        
+        }
     }
 
     /**
@@ -113,6 +128,8 @@ public class menu extends javax.swing.JPanel {
     }//GEN-LAST:event_btPatActionPerformed
 
     private void btQuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btQuitterActionPerformed
+        File voila = new File("C:\\Users\\jerom\\OneDrive\\Documents\\NetBeansProjects\\Urbain_projet_medecin\\build\\classes\\swing/voila.wav");
+        PlaySound(voila);
         System.exit(0);
     }//GEN-LAST:event_btQuitterActionPerformed
 

@@ -22,8 +22,8 @@ public class Accueil extends javax.swing.JPanel {
     public Accueil() {
         initComponents();
         //File erreur = new File("C:\\Users\\jerom\\OneDrive\\Documents\\NetBeansProjects\\Urbain_projet_medecin\\build\\classes\\swing/windows_start.wav");
-        File erreur = new File("C:\\Users\\jerom\\OneDrive\\Documents\\NetBeansProjects\\Urbain_projet_medecin\\build\\classes\\swing/bonjour.wav");
-        PlaySound(erreur);
+        File bonjour = new File("C:\\Users\\jerom\\OneDrive\\Documents\\NetBeansProjects\\Urbain_projet_medecin\\build\\classes\\swing/bonjour.wav");
+        PlaySound(bonjour);
     }
     static void PlaySound(File Sound){
         try{
